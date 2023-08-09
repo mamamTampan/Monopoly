@@ -15,8 +15,9 @@ public interface IPlayerConfig : IPlayerCard, IProperty, IJail, IBalance, IPosit
 
 		public PlayerConfig()
 		{
+			_pieceColor = GetPiece();
 			_position = 1;
-			_balance = 1500;
+			_balance = 2000;
 			_isInJail = false;
 			_keptCard = null;
 			_property = new();
@@ -65,35 +66,51 @@ public interface IPlayerConfig : IPlayerCard, IProperty, IJail, IBalance, IPosit
 		}
 		public bool GoToJail()
 		{
-			_position = 31;
-			return true;
+			while (_position == 31)
+			{
+				SetPositionToNew(11);
+				_isInJail = true;
+				return true;
+			}
+			return false;
 		}
 		public bool IsInJail()
 		{
-			if (_position == 11)
+			if (_position == 11 && _isInJail == true)
 			{
-				
+				return true;
 			}
-			return _isInJail;
+			return false;
 		}
 		public string? OpenCard()
 		{
-			return _keptCard;
+			return _keptCard?.OpenCard();
 		}
 		public bool SetKeptCard(ICard card)
 		{
-			_keptCard = card;
-			return true;
+			if (_keptCard == null)
+			{
+				_keptCard = card;
+				return true;
+			}
+			return false;
 		}
 		public bool UseCard(ICard card)
 		{
-			_keptCard = card;
-			return true;
+			if (_keptCard == card)
+			{
+				_keptCard = null;
+				return true;
+			}
+			return false;
 		}
-		public bool AddProperty(Dictionary<Tile, KeyValuePair<string, int>> properties)
+		public bool AddProperty(Dictionary<Tile, KeyValuePair<string,int>> properties)
 		{
-			_property = properties;
-			return true;
+			if (_property.Keys != properties.Keys)
+			{
+				return true;
+			}
+			return false;
 		}
 		public bool SellProperty(Tile property)
 		{

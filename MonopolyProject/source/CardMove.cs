@@ -27,19 +27,19 @@ public class CardMove
     
     public bool GoToJailCard(IPlayerConfig player)
     {
-        player.GoToJail();
+        player.IsInJail();
         return true;
     }
     
     public bool FreeFromJailCard(IPlayerConfig player)
     {
-     // player.IsInJail = false; 
+        player.SetPositionToNew(11);
         return true;
     }
     
     public bool Step(IPlayerConfig player, int steps)
     {
-        //player.Move(steps);
+        player.SetPositionToNew(steps);
         return true;
     }
     
@@ -47,7 +47,7 @@ public class CardMove
     {
         int rewardAmount = 200;
         player.IncreaseBalance(rewardAmount);
-        //player.MoveToStart();
+        player.SetPositionToNew(1);
         return true;
     }
 }

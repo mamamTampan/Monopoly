@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\BACKUP ALL TRAINING\\Monopoly\\MonopolyProject\\MonopolyProject.csproj": {}
+    "C:\\Users\\Vezsh\\Desktop\\Monopoly\\MonopolyProject\\MonopolyProject.csproj": {}
   },
   "projects": {
-    "d:\\BACKUP ALL TRAINING\\Monopoly\\MonopolyProject\\MonopolyProject.csproj": {
+    "C:\\Users\\Vezsh\\Desktop\\Monopoly\\MonopolyProject\\MonopolyProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\BACKUP ALL TRAINING\\Monopoly\\MonopolyProject\\MonopolyProject.csproj",
+        "projectUniqueName": "C:\\Users\\Vezsh\\Desktop\\Monopoly\\MonopolyProject\\MonopolyProject.csproj",
         "projectName": "MonopolyProject",
-        "projectPath": "d:\\BACKUP ALL TRAINING\\Monopoly\\MonopolyProject\\MonopolyProject.csproj",
+        "projectPath": "C:\\Users\\Vezsh\\Desktop\\Monopoly\\MonopolyProject\\MonopolyProject.csproj",
         "packagesPath": "C:\\Users\\Vezsh\\.nuget\\packages\\",
-        "outputPath": "d:\\BACKUP ALL TRAINING\\Monopoly\\MonopolyProject\\obj\\",
+        "outputPath": "C:\\Users\\Vezsh\\Desktop\\Monopoly\\MonopolyProject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Vezsh\\AppData\\Roaming\\NuGet\\NuGet.Config"

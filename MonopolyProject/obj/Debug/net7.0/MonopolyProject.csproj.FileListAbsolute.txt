@@ -1,0 +1,15 @@
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\MonopolyProject.csproj.AssemblyReference.cache
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\MonopolyProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\MonopolyProject.AssemblyInfoInputs.cache
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\MonopolyProject.AssemblyInfo.cs
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\MonopolyProject.csproj.CoreCompileInputs.cache
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\bin\Debug\net7.0\MonopolyProject.exe
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\bin\Debug\net7.0\MonopolyProject.deps.json
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\bin\Debug\net7.0\MonopolyProject.runtimeconfig.json
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\bin\Debug\net7.0\MonopolyProject.dll
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\bin\Debug\net7.0\MonopolyProject.pdb
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\MonopolyProject.dll
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\refint\MonopolyProject.dll
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\MonopolyProject.pdb
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\MonopolyProject.genruntimeconfig.cache
+C:\Users\Vezsh\Desktop\Monopoly\MonopolyProject\obj\Debug\net7.0\ref\MonopolyProject.dll

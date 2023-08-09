@@ -5,188 +5,419 @@ using MonopolyProjectInterface;
 
 namespace MonopolyProjectSource;
 
-	public class MonopolyGame
-	{
-		private Board board;
-		private GameStatus gameStatus;
-		private List<IDice> dices;
-		private CardDeck cardDeck;
-		private IPlayer currentPlayer;
-		private Dictionary<IPlayer, PlayerConfig> playerSet;
-		private List<IPlayer> TurnsOrder;
-		private int diceSide;
-		private int diceDoubleCount;
+public class MonopolyGame : IDice
+{
+	private Board board;
+	private GameStatus gameStatus;
+	private List<IDice> dices;
+	private CardDeck cardDeck;
+	private IPlayer currentPlayer;
+	private Dictionary<IPlayer, PlayerConfig> playerSet;
+	private List<IPlayer> TurnsOrder;
+	private int diceSide;
+	private int diceDoubleCount;
 
-		public MonopolyGame()
+	public MonopolyGame()
+	{
+		board = new Board();
+		gameStatus = GameStatus.NOT_STARTED;
+		dices = new List<IDice>();
+		cardDeck = new CardDeck();
+		playerSet = new Dictionary<IPlayer, PlayerConfig>();
+		TurnsOrder = new List<IPlayer>();
+		diceSide = 6;
+		diceDoubleCount = 0;
+	}
+
+	public GameStatus CheckGameStatus()
+	{
+		return gameStatus;
+	}
+
+	public bool AddPlayer(IPlayer player)
+	{
+		if (playerSet.Count < 2)
 		{
-			board = new Board();
-			gameStatus = GameStatus.NOT_STARTED;
-			dices = new List<IDice>();
-			cardDeck = new CardDeck();
-			currentPlayer = GetCurrentTurn();
-			playerSet = new Dictionary<IPlayer, PlayerConfig>();
-			TurnsOrder = new List<IPlayer>();
-			diceSide = 6;
-			diceDoubleCount = 3;
-		}
-		
-		public GameStatus CheckGameStatus()
-		{
-			return gameStatus;
-		}
-		public bool AddPlayer(IPlayer player)
-		{
-			if (playerSet.Count < 2)
+			if (playerSet.ContainsKey(player))
 			{
-				if (!playerSet.ContainsKey(player))
-				{
-					if (playerSet.Keys.Any(assigned => assigned.GetId() == player.GetId()))
-					{
-						return false;
-					}
-					var playerConfig = new PlayerConfig();
-					playerSet.Add(player, playerConfig);
-					return true;
-				}
+				var playerConfig = new PlayerConfig();
+				playerSet.Add(player, playerConfig);
+				return true;
 			}
+		}
+		return false;
+	}
+
+	public List<IPlayer> GetPlayers()
+	{
+		foreach (var key in playerSet.Keys)
+		{
+			TurnsOrder.Add(key);
+		}
+		return TurnsOrder;
+	}
+
+	public bool SetDiceSide(int _diceSide)
+	{
+		if (_diceSide < 1 || _diceSide > 6)
+		{
 			return false;
 		}
-		public List<IPlayer> GetPlayers()
+
+		diceSide = _diceSide;
+		return true;
+	}
+
+	public int Roll()
+	{
+		var random = new Random();
+		diceSide = random.Next(1, diceSide + 1);
+		return diceSide;
+	}
+
+	public virtual void IsDouble()
+	{
+		var rollValue1 = dices[0].Roll();
+		var rollValue2 = dices[1].Roll();
+		if (rollValue1 == rollValue2)
 		{
-			foreach (var key in playerSet.Keys)
+			diceDoubleCount++;
+			if (diceDoubleCount == 3)
 			{
-				TurnsOrder.Add(key);
+				//SetToJail();
+				diceDoubleCount = 0;
 			}
-			return TurnsOrder;
 		}
-		public bool SetInitialState()
+		else
 		{
-			board = new Board();
-			board.CreatingBoard();
-			cardDeck = new CardDeck();
-			playerSet = new Dictionary<IPlayer, PlayerConfig>();
+			diceDoubleCount = 0;
+		}
+	}
+
+	public int ThrowDices()
+	{
+		var diceValue1 = dices[0].Roll();
+		var diceValue2 = dices[1].Roll();
+		return diceValue1 + diceValue2;
+	}
+
+	public int ThrowDices(int index)
+	{
+		if (index < 0 || index >= dices.Count)
+		{
+			throw new ArgumentOutOfRangeException(nameof(index), "Invalid dice index");
+		}
+
+		return dices[index].Roll();
+	}
+
+	public bool SetInitialState()
+	{
+		board = new Board();
+		board.CreatingBoard();
+		cardDeck.ShuffleCard<CommunityCard>(new Stack<CommunityCard>());
+		cardDeck.ShuffleCard<ChanceCard>(new Stack<ChanceCard>());
+		foreach (var player in GetPlayers())
+		{
+			var playerConfig = new PlayerConfig();
+			playerSet.Add(player, playerConfig);
+		}
+		gameStatus = GameStatus.ONGOING;
+		SetTurnsOrder();
+		return true;
+	}
+
+	public void SetTurnsOrder()
+	{
+		var playerOrder = new Dictionary<IPlayer, int>();
+		var usedDiceResults = new List<int>();
+		foreach (var player in TurnsOrder)
+		{
+			int diceResult = ThrowDices();
+			while (usedDiceResults.Contains(diceResult))
+			{
+				diceResult = ThrowDices();
+			}
+			usedDiceResults.Add(diceResult);
+			playerOrder.Add(player, diceResult);
+		}
+
+		TurnsOrder = playerOrder.OrderBy(pair => pair.Value)
+			.Select(pair => pair.Key)
+			.ToList();
+		currentPlayer = TurnsOrder[0];
+	}
+
+	public IPlayer GetCurrentTurn()
+	{
+		return currentPlayer;
+	}
+
+	public bool Move(IPlayer player, int step)
+	{
+		if (playerSet.ContainsKey(player))
+		{
+			var playerConfig = playerSet[player];
+			playerConfig.SetPositionFromDice(step);
 			return true;
 		}
-		public void SetTurnsOrder()
-		{
-			
-		}
-		public IPlayer GetCurrentTurn()
-		{
-			return currentPlayer;
-		}
 
-		public int ThrowDices()
-		{
-			return 0;
-		}
+		return false;
+	}
 
-		public int ThrowDices(int index)
-		{
-			return 0;
-		}
+	public int CheckPlayerPosition(IPlayer player)
+	{
+		var playerConfig = playerSet[player];
+		return playerConfig.GetPosition();
+	}
 
-		public bool Move(IPlayer player, int step)
-		{
-			return true;
-		}
+	public int CheckPlayerBalance(IPlayer player)
+	{
+		var playerConfig = playerSet[player];
+		return playerConfig.GetBalance();
+	}
 
-		public int CheckPlayerPosition(IPlayer player)
-		{
-			return 0;
-		}
+	public Dictionary<Tile, KeyValuePair<string, int>> CheckPlayerProperties(IPlayer player)
+	{
+		var playerConfig = playerSet[player];
+		return playerConfig.GetProperty();
+	}
 
-		public int CheckPlayerBalance(IPlayer player)
-		{
-			return 0;
-		}
+	public bool SetToJail(IPlayer player)
+	{
+		var playerConfig = playerSet[player];
+		return playerConfig.IsInJail();
+	}
 
-		public Dictionary<Tile, KeyValuePair<string, int>> CheckPlayerProperties(IPlayer player)
+/*		public bool GrantRegular(IPlayer player)
 		{
-			return new Dictionary<Tile, KeyValuePair<string, int>>();
-		}
-
-		public bool SetToJail(IPlayer player)
-		{
-			return true;
-		}
-
-		public bool GrantRegular(IPlayer player)
-		{
-			return true;
-		}
-
-		public bool GrantBonus(IPlayer player)
-		{
-			return true;
+			public bool GrantRegular(IPlayer player, int diceValue)
+			{
+				var playerConfig = playerSet[player];
+				int initialPosition = playerConfig.GetPosition();
+				int finalPosition = initialPosition + diceValue;
+				if (finalPosition > initialPosition && finalPosition == 0)
+				{
+					int startReward = 200;
+					playerConfig.IncreaseBalance(startReward);
+				}
+				while (playerConfig.SetPositionFromDice(diceValue))
+				{
+					ThrowDices();
+				}
+			    return true;
+			}
 		}
 		public ICard TakeChanceCard()
 		{
-			return new ChanceCard();
+			var card = cardDeck.ShuffleCard<ChanceCard>(Stack<ChanceCard>);
+			if (cardDeck.ShuffleCard<ChanceCard>(chanceCards). > 0)
+			{
+				ChanceCard chanceCard = cardDeck.ChanceDeck.Pop();
+				currentPlayer.SetKeptCard(chanceCard);
+				return chanceCard;
+			}
+			return null;
 		}
+		//public ICard TakeCommCard()
+		//{
+		//	var comm = new Stack<CommunityCard>();
+		//	if (comm.Count > 0)
+		//	{
+		//		comm.Pop();
+		//		var card = playerSet[currentPlayer].OpenCard();
+		//	}
+		//}*/
 
-		public ICard TakeCommCard()
+	public bool ExecuteCard(ICard card)
+	{
+		var playerConfig = playerSet[currentPlayer];
+		//	var chance = new ChanceCard(s);
+		//	var cardMove = new CardMove();
+		// if (chanceChanceCardType.BackToLandmark){cardMove.FineCard(playerConfig);}
+		playerConfig.UseCard(card);
+		return true;
+	}
+
+	public bool SetCardToPlayer(ICard card, IPlayer player)
+	{
+		var playerConfig = playerSet[player];
+		playerConfig.SetKeptCard(card);
+		return true;
+	}
+
+	public TransactionStatus TakeTax(IPlayer player, Tile tile)
 		{
-			return new CommunityCard();
+			if (playerSet.ContainsKey(player))
+			{
+				if (tile is TaxTile taxTile)
+				{
+					taxTile.GetLocation();
+					var taxAmount = taxTile.GetAmount();
+					var success = playerSet[player].DecreaseBalance(taxAmount);
+					return TransactionStatus.SUCCESSFUL;
+				}
+				else
+				{
+					return TransactionStatus.PAID;
+				}
+			}
+			return TransactionStatus.BALANCE_NOT_ENOUGH;
+		
 		}
-
-		public bool ExecuteCard(ICard card)
+	public TransactionStatus PlayerBuyLandmark(IPlayer player, Tile tile)
+	{
+		if (playerSet.ContainsKey(player))
 		{
-			return true;
+			if (tile is LandmarkTile landmark)
+			{
+				landmark.GetLocation();
+				var initLandmark = landmark.GetInitialPrice();
+				var success = playerSet[player].DecreaseBalance(initLandmark);
+				return TransactionStatus.SUCCESSFUL;
+			}
+			else
+			{
+				return TransactionStatus.PAID;
+			}
 		}
-
-		public bool SetCardToPlayer(ICard card, IPlayer player)
-		{
-			return true;
-		}
-
-		public TransactionStatus TakeTax(IPlayer player, Tile tile)
-		{
-			throw new null();
-		}
-
-		public TransactionStatus PlayerBuyLandmark(IPlayer player, Tile tile)
-		{
-			return TransactionStatus.Success;
-		}
-
-		public TransactionStatus PlayerPayRent(IPlayer playerRent, Tile tile)
-		{
-			return TransactionStatus.Success;
-		}
-
-		public TransactionStatus PlayerPayResource(IPlayer player, Tile tile)
-		{
-			return TransactionStatus.Success;
-		}
-
-		public TransactionStatus PlayerBuyHouse(IPlayer player, Tile tile)
-		{
-			return TransactionStatus.Success;
-		}
-
+		return TransactionStatus.BALANCE_NOT_ENOUGH;
+	}
+    public TransactionStatus PlayerPayRent(IPlayer playerRent, Tile tile)
+    {
+	    if (playerSet.ContainsKey(playerRent))
+	    {
+		    if (tile is LandmarkTile landmark)
+		    {
+			    landmark.GetLocation();
+			    var taxAmount = landmark.GetRent();
+			    var success = playerSet[playerRent].DecreaseBalance(taxAmount);
+			    return TransactionStatus.SUCCESSFUL;
+		    }
+		    else
+		    {
+			    return TransactionStatus.PAID;
+		    }
+	    }
+	    return TransactionStatus.BALANCE_NOT_ENOUGH;
+		
+    }
+    public TransactionStatus PlayerPayResource(IPlayer player, Tile tile)
+    {
+	    if (playerSet.ContainsKey(player))
+	    {
+		    if (tile is PublicPlaceTile publicPlace)
+		    {
+			    publicPlace.GetLocation();
+			    var taxAmount = publicPlace.GetAmount();
+			    var success = playerSet[player].DecreaseBalance(taxAmount);
+			    return TransactionStatus.SUCCESSFUL;
+		    }
+		    else
+		    {
+			    return TransactionStatus.PAID;
+		    }
+	    }
+	    return TransactionStatus.BALANCE_NOT_ENOUGH;
+		
+    }
+    public TransactionStatus PlayerBuyHouse(IPlayer player, Tile tile)
+    {
+	    if (playerSet.ContainsKey(player))
+	    {
+		    if (tile is LandmarkTile landmark)
+		    {
+			    landmark.GetLocation();
+			    var taxAmount = landmark.GetHousePrice();
+			    var success = playerSet[player].DecreaseBalance(taxAmount);
+			    return TransactionStatus.SUCCESSFUL;
+		    }
+		    else
+		    {
+			    return TransactionStatus.PAID;
+		    }
+	    }
+	    return TransactionStatus.BALANCE_NOT_ENOUGH;
+		
+    }
 		public TransactionStatus PlayerBuyHotel(IPlayer player, Tile tile)
 		{
-			return TransactionStatus.Success;
+			if (playerSet.ContainsKey(player))
+			{
+				if (tile is LandmarkTile landmark)
+				{
+					landmark.GetLocation();
+					var taxAmount = landmark.GetHotelPrice();
+					var success = playerSet[player].DecreaseBalance(taxAmount);
+					return TransactionStatus.SUCCESSFUL;
+				}
+				else
+				{
+					return TransactionStatus.PAID;
+				}
+			}
+			return TransactionStatus.BALANCE_NOT_ENOUGH;
+		
 		}
 
-		public TransactionStatus PlayerSellLandmark(IPlayer player, Tile tile)
+    public TransactionStatus PlayerSellLandmark(IPlayer player, Tile tile)
+    {
+	    if (playerSet.ContainsKey(player))
+	    {
+		    if (tile is LandmarkTile landmark)
+		    {
+			    landmark.GetLocation();
+			    var taxAmount = landmark.GetInitialPrice();
+			    var success = playerSet[player].IncreaseBalance(taxAmount);
+			    return TransactionStatus.SUCCESSFUL;
+		    }
+		    else
+		    {
+			    return TransactionStatus.PAID;
+		    }
+	    }
+	    return TransactionStatus.BALANCE_NOT_ENOUGH;
+		
+    }
+    public bool SetNextTurn()
 		{
-			return TransactionStatus.Success;
+			if (gameStatus == GameStatus.NOT_STARTED)
+			{
+				gameStatus = GameStatus.ONGOING;
+				currentPlayer = TurnsOrder[0];
+				return true;
+			} 
+			else if (gameStatus == GameStatus.ONGOING)
+			{
+				var index = TurnsOrder.IndexOf(currentPlayer);
+				if (index != -1)
+				{
+					var nextIndex = (index + 1) % TurnsOrder.Count;
+					currentPlayer = TurnsOrder[nextIndex]; 
+					return true;
+				}
+			}
+			return false; 
 		}
-		public bool SetNextTurn()
+    public IPlayer CheckRichest()
 		{
-			return true;
-		}
-
-		public IPlayer CheckRichest()
-		{
+			currentPlayer = null;
+			var highestBalance = int.MinValue;
+			foreach (var player in playerSet.Keys)
+			{
+				var playerConfig = playerSet[player];
+				var playerBalance = playerConfig.GetBalance();
+				if (playerBalance > highestBalance)
+				{
+					currentPlayer = player;
+					highestBalance = playerBalance;
+				}
+			}
 			return currentPlayer;
 		}
-
-		public IPlayer CheckWinner()
-		{
+    public IPlayer CheckWinner()
+        {
+            gameStatus = GameStatus.WIN;
 			return currentPlayer;
 		}
-
 	}

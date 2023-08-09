@@ -13,7 +13,7 @@ namespace MonopolyProjectSource;
             chanceDeck = new Stack<ChanceCard>();
             commDeck = new Stack<CommunityCard>();
         }
-        public bool ShuffleCard<T>(Stack<T> deck)
+        public bool ShuffleCard<T>(Stack<T>? deck)
         {
             if (deck == null || deck.Count <= 1)
             {
