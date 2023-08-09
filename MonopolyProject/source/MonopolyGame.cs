@@ -14,8 +14,7 @@ public class MonopolyGame : IDice
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
 	private List<IPlayer> TurnsOrder;
-	private int diceSide;
-	private int diceDoubleCount;
+
 
 	public MonopolyGame()
 	{
@@ -34,7 +33,6 @@ public class MonopolyGame : IDice
 	{
 		return gameStatus;
 	}
-
 	public bool AddPlayer(IPlayer player)
 	{
 		if (playerSet.Count < 2)
@@ -48,7 +46,6 @@ public class MonopolyGame : IDice
 		}
 		return false;
 	}
-
 	public List<IPlayer> GetPlayers()
 	{
 		foreach (var key in playerSet.Keys)
@@ -57,41 +54,6 @@ public class MonopolyGame : IDice
 		}
 		return TurnsOrder;
 	}
-
-	public bool SetDiceSide(int _diceSide)
-	{
-		if (_diceSide < 1 || _diceSide > 6)
-		{
-			return false;
-		}
-		diceSide = _diceSide;
-		return true;
-	}
-	public int Roll()
-	{
-		var random = new Random();
-		diceSide = random.Next(1, diceSide + 1);
-		return diceSide;
-	}
-	public virtual void IsDouble()
-	{
-		var rollValue1 = dices[0].Roll();
-		var rollValue2 = dices[1].Roll();
-		if (rollValue1 == rollValue2)
-		{
-			diceDoubleCount++;
-			if (diceDoubleCount == 3)
-			{
-				//SetToJail();
-				diceDoubleCount = 0;
-			}
-		}
-		else
-		{
-			diceDoubleCount = 0;
-		}
-	}
-
 	public int ThrowDices()
 	{
 		var diceValue1 = dices[0].Roll();
