@@ -9,10 +9,7 @@ public class GoToJailTile : Tile
 		this._location = location;
 		this._description = description;
 	}
-	public override TileType GetType()
-    {
-        return _type;
-    }
+    public override TileType Type => _type;
     public override string GetName()
     {
         return _name;

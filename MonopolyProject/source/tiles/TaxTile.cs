@@ -10,12 +10,17 @@ public class TaxTile : Tile
 		this._location = location;
 		this._description = description;
 	}
-	public override TileType GetType()
-	{
-		return _type;
-	}
+	public override TileType Type => _type;
 	public override string GetName()
 	{
+		if (_location == 5)
+		{
+			_name = "Tax Property";
+		}
+		else if (_location == 39)
+		{
+			_name = "Tax Luxury";
+		}
 		return _name;
 	}
 	public override int GetLocation()
@@ -24,6 +29,14 @@ public class TaxTile : Tile
 	}
 	public override string GetDescription()
 	{
+		if (_location == 5)
+		{
+			_description = "Tax Property";
+		}
+		else if (_location == 39)
+		{
+			_description = "Tax Luxury";
+		}
 		return _description;
 	}
 	public int GetAmount()

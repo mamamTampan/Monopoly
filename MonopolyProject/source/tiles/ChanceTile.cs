@@ -9,12 +9,10 @@ public class ChanceTile : Tile
 		this._location = location;
 		this._description = description;
 	}
-	public override TileType GetType()
+	public override TileType Type => _type;
+    public override string GetName()
 	{
-		return _type;
-	}
-	public override string GetName()
-	{
+		_name = "Chance";
 		return _name;
 	}
 	public override int GetLocation()
@@ -23,6 +21,7 @@ public class ChanceTile : Tile
 	}
 	public override string GetDescription()
 	{
+		_description = "Chance";
 		return _description;
 	}
 }

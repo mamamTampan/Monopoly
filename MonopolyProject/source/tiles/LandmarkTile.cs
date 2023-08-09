@@ -24,11 +24,8 @@ public class LandmarkTile : Tile
 		_hasProperty = false;
 		//SetOwner();
 	}
-	public override TileType GetType()
-	{
-		return _type;
-	}
-	public override string GetName()
+    public override TileType Type => _type;
+    public override string GetName()
 	{
 		return _name;
 	}

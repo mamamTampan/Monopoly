@@ -11,11 +11,8 @@ public class StartTile : Tile
 		this._description = description;
 		GetAmount();
 	}
-	public override TileType GetType()
-	{
-		return _type;
-	}
-	public override string GetName()
+    public override TileType Type => _type;
+    public override string GetName()
 	{
 		return _name;
 	}

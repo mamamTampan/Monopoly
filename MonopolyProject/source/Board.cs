@@ -6,14 +6,14 @@ namespace MonopolyProjectSource;
 public class Board
 {
 	private List<Tile> tiles;
-    public Board()
+	public Board()
 	{
 		tiles = new List<Tile>();
 		CreatingBoard();
 	}
 	public List<Tile> CreatingBoard()
 	{
-        tiles.Add(new StartTile("GO !!!", 1,"Collect $200 for salary"));
+		tiles.Add(new StartTile("GO !!!", 1,"Collect $200 for salary"));
 		tiles.Add(new LandmarkTile("Malaysia", 2,"Price $60"));
 		tiles.Add(new CommunityTile("Community Chest", 3,"Take a Community Card"));
 		tiles.Add(new LandmarkTile("Thailand", 4,"Price $60"));
@@ -54,7 +54,9 @@ public class Board
 		tiles.Add(new TaxTile("Luxury Tax", 39,"Pay $100"));
 		tiles.Add(new LandmarkTile("Indonesia ", 40,"Price $400"));
 		return tiles;
+		
 	}
+		
 	public static DataContractJsonSerializerSettings Settings = new DataContractJsonSerializerSettings
 		{ UseSimpleDictionaryFormat = true };
 	public void SerializeChance()

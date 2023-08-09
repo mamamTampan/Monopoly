@@ -10,6 +10,8 @@ public class HumanPlayer : IPlayer
 	{
 		SetId(id);
 		SetName(name);
+		GetName();
+		GetId();
 	}
 	public bool SetName(string name)
 	{
@@ -31,7 +33,7 @@ public class HumanPlayer : IPlayer
 			_id = id;
 			return true;
 		}
-        return false;
+		return false;
 	}
 	public int GetId()
 	{

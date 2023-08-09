@@ -9,20 +9,19 @@ public class CommunityTile : Tile
 		this._location = location;
 		this._description = description;
 	}
-	public override TileType GetType()
-    {
-        return _type;
-    }
+	public override TileType Type => _type;
     public override string GetName()
-    {
-        return _name;
-    }
-    public override int GetLocation()
-    {
-        return _location;
-    }
-    public override string GetDescription()
-    {
-        return _description;
-    }
+	{
+		_name = "Community Chest";
+		return _name;
+	}
+	public override int GetLocation()
+	{
+		return _location;
+	}
+	public override string GetDescription()
+	{
+		_description = "Community Chest";	
+		return _description;
+	}
 }
