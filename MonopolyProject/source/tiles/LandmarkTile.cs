@@ -24,8 +24,8 @@ public class LandmarkTile : Tile
 		_hasProperty = false;
 		//SetOwner();
 	}
-    public override TileType Type => _type;
-    public override string GetName()
+	public override TileType Type => _type;
+	public override string GetName()
 	{
 		return _name;
 	}
@@ -57,6 +57,7 @@ public class LandmarkTile : Tile
 	}
 	public int GetMaxHotel()
 	{
+		_maxHotel = 1;
 		return _maxHotel;
 	}
 	public int GetHouseTotal()
