@@ -14,18 +14,21 @@ public class MonopolyGame
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
 	private List<IPlayer> TurnsOrder;
-	
-	
-	public MonopolyGame()
-	{
-		board = new Board();
-		gameStatus = GameStatus.NOT_STARTED;
-		dices = new List<IDice>();
-		cardDeck = new CardDeck();
-		playerSet = new Dictionary<IPlayer, PlayerConfig>();
-		TurnsOrder = new List<IPlayer>();
-		currentPlayer = new HumanPlayer(0, "");
-	}
+
+
+public MonopolyGame()
+{
+	board = new Board();
+	gameStatus = GameStatus.NOT_STARTED;
+	dices = new List<IDice>();
+	dices.Add(new Dice());
+	dices.Add(new Dice());
+	cardDeck = new CardDeck();
+	playerSet = new Dictionary<IPlayer, PlayerConfig>();
+	TurnsOrder = new List<IPlayer>();
+	currentPlayer = new HumanPlayer(0, "");
+}
+
 
 	public GameStatus CheckGameStatus()
 	{
@@ -33,9 +36,9 @@ public class MonopolyGame
 	}
 	public bool AddPlayer(IPlayer player)
 	{
-		if (playerSet.Count < 2)
+		if (playerSet.Count > 1)
 		{
-			if (playerSet.ContainsKey(player))
+			if (!playerSet.ContainsKey(player))
 			{
 				var playerConfig = new PlayerConfig();
 				playerSet.Add(player, playerConfig);
@@ -54,25 +57,21 @@ public class MonopolyGame
 	}
 	public int ThrowDice()
 	{
-		var diceValue1 = dices[1].Roll();
-		var diceValue2 = dices[2].Roll();
+		int diceValue1 = dices[0].Roll();
+		int diceValue2 = dices[1].Roll();
 		return diceValue1 += diceValue2;
 	}
-
 	public int ThrowDices(int index)
 	{
 		if (index < 0 || index >= dices.Count)
 		{
 			throw new ArgumentOutOfRangeException(nameof(index), "Invalid dice index");
 		}
-
 		return dices[index].Roll();
 	}
 
 	public bool SetInitialState()
 	{
-
-		board = new Board();
 		board.CreatingBoard();
 		cardDeck.ShuffleCard<CommunityCard>(new Stack<CommunityCard>());
 		cardDeck.ShuffleCard<ChanceCard>(new Stack<ChanceCard>());
@@ -105,12 +104,10 @@ public class MonopolyGame
 								.Select(pair => pair.Key)
 								.ToList();
 	}
-
 	public IPlayer GetCurrentTurn()
 	{
 		return currentPlayer;
 	}
-
 	public bool Move(IPlayer player, int step)
 	{
 		if (playerSet.ContainsKey(player))
@@ -119,10 +116,8 @@ public class MonopolyGame
 			playerConfig.SetPositionFromDice(step);
 			return true;
 		}
-
 		return false;
 	}
-
 	public int CheckPlayerPosition(IPlayer player)
 	{
 		var playerConfig = playerSet[player];
@@ -206,7 +201,7 @@ public class MonopolyGame
 			{
 				taxTile.GetLocation();
 				var taxAmount = taxTile.GetAmount();
-				var success = playerSet[player].DecreaseBalance(taxAmount);
+				_ = playerSet[player].DecreaseBalance(taxAmount);
 				return TransactionStatus.SUCCESSFUL;
 			}
 			else
@@ -225,7 +220,7 @@ public class MonopolyGame
 			{
 				landmark.GetLocation();
 				var initLandmark = landmark.GetInitialPrice();
-				var success = playerSet[player].DecreaseBalance(initLandmark);
+				_ = playerSet[player].DecreaseBalance(initLandmark);
 				return TransactionStatus.SUCCESSFUL;
 			}
 			else
@@ -310,7 +305,7 @@ public class MonopolyGame
 		}
 		return TransactionStatus.BALANCE_NOT_ENOUGH;
 	}
-	
+
 	public TransactionStatus PlayerSellLandmark(IPlayer player, Tile tile)
 	{
 		if (playerSet.ContainsKey(player))
@@ -329,7 +324,7 @@ public class MonopolyGame
 		}
 		return TransactionStatus.BALANCE_NOT_ENOUGH;
 	}
-	
+
 	public bool SetNextTurn()
 	{
 		if (gameStatus == GameStatus.NOT_STARTED)
@@ -350,7 +345,7 @@ public class MonopolyGame
 		}
 		return false;
 	}
-	
+
 	public IPlayer CheckRichest()
 	{
 		//currentPlayer = null;
@@ -367,10 +362,11 @@ public class MonopolyGame
 		}
 		return currentPlayer;
 	}
-	
+
 	public IPlayer CheckWinner()
 	{
 		gameStatus = GameStatus.WIN;
 		return currentPlayer;
 	}
+
 }

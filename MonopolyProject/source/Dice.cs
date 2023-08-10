@@ -9,7 +9,11 @@ public class Dice : IDice
 	
 	public bool SetDiceSide(int _diceSide)
 	{
-		if (_diceSide < 1 || _diceSide > 6)
+		if (_diceSide >= 1 || _diceSide <= 6)
+		{
+			return false;
+		}
+		else if(_diceSide < 0 )
 		{
 			return false;
 		}
@@ -19,7 +23,7 @@ public class Dice : IDice
 	public int Roll()
 	{
 		var random = new Random();
-		diceSide = random.Next(1, diceSide + 1);
+		diceSide = random.Next(1,7);
 		return diceSide;
 	}
 	public virtual void IsDouble()
@@ -29,14 +33,6 @@ public class Dice : IDice
 		if ( roll1 == roll2 )
 		{
 			diceDoubleCount++;
-			if (diceDoubleCount == 3)
-			{
-				diceDoubleCount = 0;
-			}
 		}
-		else
-		{
-			diceDoubleCount = 0;
-		}	
 	}
 }
