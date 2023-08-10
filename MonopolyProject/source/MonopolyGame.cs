@@ -5,7 +5,7 @@ using MonopolyProjectInterface;
 
 namespace MonopolyProjectSource;
 
-public class MonopolyGame : IDice
+public class MonopolyGame
 {
 	private Board board;
 	private GameStatus gameStatus;
@@ -14,8 +14,8 @@ public class MonopolyGame : IDice
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
 	private List<IPlayer> TurnsOrder;
-
-
+	
+	
 	public MonopolyGame()
 	{
 		board = new Board();
@@ -24,8 +24,6 @@ public class MonopolyGame : IDice
 		cardDeck = new CardDeck();
 		playerSet = new Dictionary<IPlayer, PlayerConfig>();
 		TurnsOrder = new List<IPlayer>();
-		diceSide = 6;
-		diceDoubleCount = 0;
 		currentPlayer = new HumanPlayer(0, "");
 	}
 
@@ -54,10 +52,10 @@ public class MonopolyGame : IDice
 		}
 		return TurnsOrder;
 	}
-	public int ThrowDices()
+	public int ThrowDice()
 	{
-		var diceValue1 = dices[0].Roll();
-		var diceValue2 = dices[1].Roll();
+		var diceValue1 = dices[1].Roll();
+		var diceValue2 = dices[2].Roll();
 		return diceValue1 += diceValue2;
 	}
 
@@ -94,10 +92,10 @@ public class MonopolyGame : IDice
 		var usedDiceResults = new List<int>();
 		foreach (var player in TurnsOrder)
 		{
-			int diceResult = ThrowDices();
+			int diceResult = ThrowDice();
 			while (usedDiceResults.Contains(diceResult))
 			{
-				diceResult = ThrowDices();
+				diceResult = ThrowDice();
 			}
 			usedDiceResults.Add(diceResult);
 			playerOrder.Add(player, diceResult);
@@ -106,7 +104,6 @@ public class MonopolyGame : IDice
 		TurnsOrder = playerOrder.OrderByDescending(pair => pair.Value)
 								.Select(pair => pair.Key)
 								.ToList();
-		currentPlayer = TurnsOrder[0];
 	}
 
 	public IPlayer GetCurrentTurn()
@@ -154,7 +151,7 @@ public class MonopolyGame : IDice
 	{
 		var playerConfig = playerSet[player];
 		int initialPosition = playerConfig.GetPosition();
-		int finalPosition = initialPosition + ThrowDices();
+		int finalPosition = initialPosition + ThrowDice();
 		if (finalPosition > initialPosition && finalPosition == 0)
 		{
 			int startReward = 200;

@@ -13,7 +13,6 @@ static class Program
         IPlayer player2 = new HumanPlayer(222, "Asep");
         game.AddPlayer(player1);
         game.AddPlayer(player2);
-        game.SetDiceSide(6);
         game.SetInitialState();
 
         while (game.CheckGameStatus() == GameStatus.ONGOING)
@@ -22,7 +21,7 @@ static class Program
 
             Console.WriteLine($"Sekarang giliran {currentPlayer.GetName()} untuk bermain.");
 
-            int diceValue = game.ThrowDices();
+            int diceValue = game.ThrowDice();
             Console.WriteLine($"Hasil lemparan dadu: {diceValue}");
 
             game.Move(currentPlayer, diceValue);
