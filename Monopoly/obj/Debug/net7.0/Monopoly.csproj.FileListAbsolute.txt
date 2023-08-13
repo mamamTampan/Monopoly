@@ -1,0 +1,15 @@
+C:\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.exe
+c:\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.deps.json
+c:\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.runtimeconfig.json
+C:\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.dll
+C:\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.pdb
+C:\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.csproj.AssemblyReference.cache
+C:\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.GeneratedMSBuildEditorConfig.editorconfig
+C:\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.AssemblyInfoInputs.cache
+C:\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.AssemblyInfo.cs
+C:\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.csproj.CoreCompileInputs.cache
+C:\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.dll
+C:\Monopoly\Monopoly\obj\Debug\net7.0\refint\Monopoly.dll
+C:\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.pdb
+c:\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.genruntimeconfig.cache
+c:\Monopoly\Monopoly\obj\Debug\net7.0\ref\Monopoly.dll
