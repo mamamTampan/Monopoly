@@ -11,23 +11,11 @@ public class MonopolyGame
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
 	private List<IPlayer> TurnsOrder;
-	private List<ChanceCard> _chanceCards;
-	private List<CommunityCard> _commCards;
-	private Stack<ChanceCard> _chanceDeck; 
+	private List<ChanceCardType> _chanceCards;
+	private List<CommunityCardType> _commCards;
+	private Stack<ChanceCard> _chanceDeck;
 	private Stack<CommunityCard> _commDeck;
-	
-		private void InitializeCardDecks()
-	{
-		// Inisialisasi tipe kartu yang ingin ada dalam deck
-		List<ChanceCardType> chanceCardTypes = new List<ChanceCardType>
-		{
-			ChanceCardType.Fine,
-			ChanceCardType.Reward,
-			// Tambahkan tipe kartu lainnya yang diperlukan
-		};
 
-		cardDeck = new CardDeck(chanceCardTypes);
-	}
 	public MonopolyGame()
 	{
 		board = new();
@@ -37,25 +25,34 @@ public class MonopolyGame
 			new Dice(),
 			new Dice()
 		};
-		_chanceCards = new();
 		_commCards = new();
-		//cardDeck = new CardDeck(_chanceCards);
-		InitializeCardDecks();
+		_chanceCards = new List<ChanceCardType>
+		{
+			ChanceCardType.Fine,
+			ChanceCardType.Reward,
+			ChanceCardType.Tax,
+			ChanceCardType.GoToJail,
+			ChanceCardType.FreeFromJail,
+			ChanceCardType.HeadToLandmark,
+			ChanceCardType.BackToLandmark,
+			ChanceCardType.StepForward,
+			ChanceCardType.StepBack,
+			ChanceCardType.HeadToStart
+		};
+		cardDeck = new CardDeck(_chanceCards);
 		_chanceDeck = new();
 		_commDeck = new();
 		playerSet = new Dictionary<IPlayer, PlayerConfig>();
 		TurnsOrder = new List<IPlayer>();
 		currentPlayer = new HumanPlayer(0, "");
 	}
-
 	public GameStatus CheckGameStatus()
 	{
 		return gameStatus;
 	}
-
 	public bool AddPlayer(IPlayer player)
 	{
-		if (playerSet.Count < 2 )
+		if (playerSet.Count < 2)
 		{
 			if (!playerSet.ContainsKey(player))
 			{
@@ -66,7 +63,6 @@ public class MonopolyGame
 		}
 		return false;
 	}
-
 	public List<IPlayer> GetPlayers()
 	{
 		TurnsOrder = new();
@@ -76,32 +72,26 @@ public class MonopolyGame
 		}
 		return TurnsOrder;
 	}
-
 	public IPlayer GetCurrentTurn()
 	{
 		return currentPlayer;
 	}
-
 	public int ThrowDices(int index)
 	{
 		return dices[index].Roll();
 	}
-	
 	public void SetTurnsOrder()
 	{
 		TurnsOrder = TurnsOrder.OrderBy(_ => Guid.NewGuid()).ToList();
 	}
-
 	public bool SetInitialState()
 	{
-		InitializeCardDecks();
 		board.CreatingBoard();
 		cardDeck.ShuffleCard(_chanceDeck);
 		cardDeck.ShuffleCard(_commDeck);
 		gameStatus = GameStatus.ONGOING;
 		return true;
 	}
-
 	public bool Move(IPlayer player, int step)
 	{
 		if (playerSet.ContainsKey(player))

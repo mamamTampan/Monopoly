@@ -12,7 +12,6 @@ public class ChanceCard : ICard
 		this._type = type;
 		this._description = GetDescriptionByType(type);
 	}
-	
 	private string GetDescriptionByType(ChanceCardType type)
     {
         switch (type)
@@ -25,7 +24,6 @@ public class ChanceCard : ICard
                 return "Card description not found.";
         }
     }
-
 	public string? OpenCard()
 	{
 		return _description;
