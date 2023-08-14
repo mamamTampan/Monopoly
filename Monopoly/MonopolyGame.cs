@@ -6,28 +6,28 @@ public class MonopolyGame
 {
 	private Board board;
 	private GameStatus gameStatus;
+	private Dice _dice;
 	private List<IDice> dices;
 	private CardDeck cardDeck;
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
 	private List<IPlayer> TurnsOrder;
+	private List<int> _doubleDice;
 
 
 	public MonopolyGame()
 	{
 		board = new();
 		gameStatus = GameStatus.NOT_STARTED;
-		dices = new List<IDice>
-		{
-			new Dice(),
-			new Dice()
-		};
+		_dice = new Dice();
+		dices = new List<IDice>();
+		_doubleDice = new List<int>();
 		cardDeck = new CardDeck();
 		playerSet = new Dictionary<IPlayer, PlayerConfig>();
 		TurnsOrder = new List<IPlayer>();
 		currentPlayer = new HumanPlayer(0, "");
 	}
-	
+
 	public GameStatus CheckGameStatus()
 	{
 		return gameStatus;
@@ -35,7 +35,7 @@ public class MonopolyGame
 
 	public bool AddPlayer(IPlayer player)
 	{
-		if (playerSet.Count < 2)
+		if (playerSet.Count <= 8)
 		{
 			if (!playerSet.ContainsKey(player))
 			{
@@ -46,10 +46,9 @@ public class MonopolyGame
 		}
 		return false;
 	}
-	
+
 	public List<IPlayer> GetPlayers()
 	{
-		TurnsOrder = new();
 		foreach (var key in playerSet.Keys)
 		{
 			TurnsOrder.Add(key);
@@ -62,19 +61,30 @@ public class MonopolyGame
 		return currentPlayer;
 	}
 
-	public int ThrowDices(int index)
+	public int ThrowDice()
 	{
-		return dices[index].Roll();
+		_doubleDice.Clear();
+		_dice.SetDiceSide(6);
+		int result = 0;
+		foreach (var dice in dices)
+		{
+			result = dice.Roll();
+			_doubleDice.Add(result);
+		}
+		dices.Add(dice);
 	}
 
 	public void SetTurnsOrder()
 	{
-		TurnsOrder = TurnsOrder.OrderBy(_ => Guid.NewGuid()).ToList();
+		Random random = new();
+		TurnsOrder = TurnsOrder.OrderByDescending(_ => random.Next())
+							   .ToList();
 	}
 
 	public bool SetInitialState()
 	{
 		board.CreatingBoard();
+		SetTurnsOrder();
 		gameStatus = GameStatus.ONGOING;
 		return true;
 	}
@@ -84,11 +94,16 @@ public class MonopolyGame
 		if (playerSet.ContainsKey(player))
 		{
 			var playerConfig = playerSet[player];
-			step = ThrowDices(0) + ThrowDices(1);
+			step = (ThrowDices(0)+ThrowDices(1))%40;
 			playerConfig.SetPositionFromDice(step);
 			return true;
 		}
 		return false;
+	}
+	public string? TileName(int position)
+	{
+		var tile = board.GetTileNameAtPosition(position);
+		return tile;
 	}
 
 	public int CheckPlayerPosition(IPlayer player)
@@ -333,7 +348,7 @@ public class MonopolyGame
 		else if (gameStatus == GameStatus.ONGOING)
 		{
 			var index = TurnsOrder.IndexOf(currentPlayer);
-			if (index != -1)
+			if (index == -1)
 			{
 				var nextIndex = (index + 1) % TurnsOrder.Count;
 				currentPlayer = TurnsOrder[nextIndex];
@@ -345,7 +360,6 @@ public class MonopolyGame
 
 	public IPlayer CheckRichest()
 	{
-		//currentPlayer = null;
 		var highestBalance = int.MinValue;
 		foreach (var player in playerSet.Keys)
 		{

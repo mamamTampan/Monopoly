@@ -7,15 +7,9 @@ namespace MonopolyProjectSource
 		private int diceSide;
 		private int diceDoubleCount;
 
-		public Dice()
-		{
-			diceSide = 6;
-			diceDoubleCount = 0;
-		}
-
 		public bool SetDiceSide(int _diceSide)
 		{
-			if (_diceSide == 6)
+			if (diceSide <= 10)
 			{
 				diceSide = _diceSide;
 				return true;
@@ -25,8 +19,8 @@ namespace MonopolyProjectSource
 
 		public int Roll()
 		{
-			Random rand = new Random();
-			diceSide = rand.Next(1, 7);
+			Random rand = new ();
+			diceSide = rand.Next(1, diceSide + 1);
 			return diceSide;
 		}
 

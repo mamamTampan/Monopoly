@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj": {}
+    "C:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj": {
+    "C:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
+        "projectUniqueName": "C:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
         "projectName": "Monopoly",
-        "projectPath": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
+        "projectPath": "C:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
         "packagesPath": "C:\\Users\\Vezsh\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\obj\\",
+        "outputPath": "C:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Vezsh\\AppData\\Roaming\\NuGet\\NuGet.Config"
