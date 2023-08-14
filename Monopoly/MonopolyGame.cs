@@ -6,22 +6,22 @@ public class MonopolyGame
 {
 	private Board board;
 	private GameStatus gameStatus;
-	private Dice _dice;
 	private List<IDice> dices;
 	private CardDeck cardDeck;
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
 	private List<IPlayer> TurnsOrder;
-	private List<int> _doubleDice;
 
 
 	public MonopolyGame()
 	{
 		board = new();
 		gameStatus = GameStatus.NOT_STARTED;
-		_dice = new Dice();
-		dices = new List<IDice>();
-		_doubleDice = new List<int>();
+		dices = new List<IDice>
+		{
+			new Dice(),
+			new Dice()
+		};
 		cardDeck = new CardDeck();
 		playerSet = new Dictionary<IPlayer, PlayerConfig>();
 		TurnsOrder = new List<IPlayer>();
@@ -61,17 +61,9 @@ public class MonopolyGame
 		return currentPlayer;
 	}
 
-	public int ThrowDice()
+	public int ThrowDices(int index)
 	{
-		_doubleDice.Clear();
-		_dice.SetDiceSide(6);
-		int result = 0;
-		foreach (var dice in dices)
-		{
-			result = dice.Roll();
-			_doubleDice.Add(result);
-		}
-		dices.Add(dice);
+		return dices[index].Roll();
 	}
 
 	public void SetTurnsOrder()
@@ -94,7 +86,7 @@ public class MonopolyGame
 		if (playerSet.ContainsKey(player))
 		{
 			var playerConfig = playerSet[player];
-			step = (ThrowDices(0)+ThrowDices(1))%40;
+			step = (ThrowDices(0)+ThrowDices(1));
 			playerConfig.SetPositionFromDice(step);
 			return true;
 		}

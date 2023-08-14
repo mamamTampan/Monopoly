@@ -43,7 +43,7 @@ public class PlayerConfig : IPlayerConfig
 	}
 	public int GetPosition()
 	{
-		return _position % 40;
+		return _position;
 	}
 	public bool SetBalance(int balance)
 	{

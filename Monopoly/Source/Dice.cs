@@ -4,12 +4,12 @@ namespace MonopolyProjectSource
 {
 	public class Dice : IDice
 	{
-		private int diceSide;
-		private int diceDoubleCount;
-
+		private int diceSide = 6;
+		private int diceDoubleCount = 0;
+		
 		public bool SetDiceSide(int _diceSide)
 		{
-			if (diceSide <= 10)
+			if (diceSide <= 6)
 			{
 				diceSide = _diceSide;
 				return true;
@@ -20,7 +20,7 @@ namespace MonopolyProjectSource
 		public int Roll()
 		{
 			Random rand = new ();
-			diceSide = rand.Next(1, diceSide + 1);
+			diceSide = rand.Next(1, 7);
 			return diceSide;
 		}
 

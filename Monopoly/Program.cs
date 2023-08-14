@@ -7,7 +7,7 @@ namespace Monopoly
 	{
 		static void Main()
 		{
-			//Console.Clear();
+			Console.Clear();
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("-+++--Welcome to Monopoly Game--+++-");
 			Console.WriteLine("------------------------------------\n");
