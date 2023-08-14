@@ -11,10 +11,7 @@ public class MonopolyGame
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
 	private List<IPlayer> TurnsOrder;
-	private List<ChanceCardType> _chanceCards;
-	private List<CommunityCardType> _commCards;
-	private Stack<ChanceCard> _chanceDeck;
-	private Stack<CommunityCard> _commDeck;
+
 
 	public MonopolyGame()
 	{
@@ -25,31 +22,17 @@ public class MonopolyGame
 			new Dice(),
 			new Dice()
 		};
-		_commCards = new();
-		_chanceCards = new List<ChanceCardType>
-		{
-			ChanceCardType.Fine,
-			ChanceCardType.Reward,
-			ChanceCardType.Tax,
-			ChanceCardType.GoToJail,
-			ChanceCardType.FreeFromJail,
-			ChanceCardType.HeadToLandmark,
-			ChanceCardType.BackToLandmark,
-			ChanceCardType.StepForward,
-			ChanceCardType.StepBack,
-			ChanceCardType.HeadToStart
-		};
-		cardDeck = new CardDeck(_chanceCards);
-		_chanceDeck = new();
-		_commDeck = new();
+		cardDeck = new CardDeck();
 		playerSet = new Dictionary<IPlayer, PlayerConfig>();
 		TurnsOrder = new List<IPlayer>();
 		currentPlayer = new HumanPlayer(0, "");
 	}
+	
 	public GameStatus CheckGameStatus()
 	{
 		return gameStatus;
 	}
+
 	public bool AddPlayer(IPlayer player)
 	{
 		if (playerSet.Count < 2)
@@ -63,6 +46,7 @@ public class MonopolyGame
 		}
 		return false;
 	}
+	
 	public List<IPlayer> GetPlayers()
 	{
 		TurnsOrder = new();
@@ -72,113 +56,125 @@ public class MonopolyGame
 		}
 		return TurnsOrder;
 	}
+
 	public IPlayer GetCurrentTurn()
 	{
 		return currentPlayer;
 	}
+
 	public int ThrowDices(int index)
 	{
 		return dices[index].Roll();
 	}
+
 	public void SetTurnsOrder()
 	{
 		TurnsOrder = TurnsOrder.OrderBy(_ => Guid.NewGuid()).ToList();
 	}
+
 	public bool SetInitialState()
 	{
 		board.CreatingBoard();
-		cardDeck.ShuffleCard(_chanceDeck);
-		cardDeck.ShuffleCard(_commDeck);
 		gameStatus = GameStatus.ONGOING;
 		return true;
 	}
+
 	public bool Move(IPlayer player, int step)
 	{
 		if (playerSet.ContainsKey(player))
 		{
 			var playerConfig = playerSet[player];
+			step = ThrowDices(0) + ThrowDices(1);
 			playerConfig.SetPositionFromDice(step);
 			return true;
 		}
 		return false;
 	}
+
 	public int CheckPlayerPosition(IPlayer player)
 	{
-		int position = 0;
 		if (playerSet.ContainsKey(player))
 		{
-			foreach (var playerConfig in playerSet.Values)
-			{
-				position += playerConfig.GetPosition();
-			}
+			var playerConfig = playerSet[player];
+			return playerConfig.GetPosition();
 		}
-		return position;
+		else
+		{
+			throw new ArgumentException("Player not found in playerSet.");
+		}
 	}
 
 	public int CheckPlayerBalance(IPlayer player)
 	{
-		int balance = 0;
+		var playerConfig = playerSet[player];
 		if (playerSet.ContainsKey(player))
 		{
-			foreach (var playerConfig in playerSet.Values)
-			{
-				balance += playerConfig.GetBalance();
-			}
+			return playerConfig.GetBalance();
 		}
-		return balance;
+		else
+		{
+			throw new ArgumentException("Player not found in playerSet.");
+		}
 	}
 
 	public Dictionary<Tile, KeyValuePair<string, int>> CheckPlayerProperties(IPlayer player)
 	{
-		var playerConfig = playerSet[player];
-		return playerConfig.GetProperty();
+		if (playerSet.ContainsKey(player))
+		{
+			var playerConfig = playerSet[player];
+			return playerConfig.GetProperty();
+		}
+		else
+		{
+			throw new ArgumentException("Player not found in playerSet.");
+		}
 	}
 
 	public bool SetToJail(IPlayer player)
 	{
-		var playerConfig = playerSet[player];
-		return playerConfig.IsInJail();
+		if (playerSet.ContainsKey(player))
+		{
+			var playerConfig = playerSet[player];
+			playerConfig.IsInJail();
+			return true;
+		}
+		return false;
 	}
 
 	public bool GrantRegular(IPlayer player)
 	{
-		var playerConfig = playerSet[player];
-		int initialPosition = playerConfig.GetPosition();
-		int finalPosition = initialPosition + ThrowDices(0) + ThrowDices(1);
-		if (finalPosition > initialPosition && finalPosition == 0)
+		if (playerSet.ContainsKey(player))
 		{
-			int startReward = 200;
-			playerConfig.IncreaseBalance(startReward);
+			var playerConfig = playerSet[player];
+			int initialPosition = playerConfig.GetPosition();
+			int finalPosition = initialPosition + ThrowDices(0) + ThrowDices(1);
+			if (finalPosition > initialPosition && finalPosition == 0)
+			{
+				int startReward = 200;
+				playerConfig.IncreaseBalance(startReward);
+				return true;
+			}
 		}
-		return true;
-
+		return false;
 	}
 	public ICard? TakeChanceCard()
 	{
-		var chance = new Stack<ChanceCard>();
-		if (chance.Count > 0)
-		{
-			chance.Pop();
-			var card = playerSet[currentPlayer].OpenCard();
-		}
+		// posisi tile, ambil card, hapus card
+		cardDeck.DrawChanceCard();
+		var card = playerSet[currentPlayer].OpenCard();
 		return null;
 	}
-
 
 	public ICard? TakeCommCard()
 	{
-		var comm = new Stack<CommunityCard>();
-		if (comm.Count > 0)
-		{
-			comm.Pop();
-			var card = playerSet[currentPlayer].OpenCard();
-		}
+		cardDeck.DrawCommunityCard();
+		var card = playerSet[currentPlayer].OpenCard();
 		return null;
 	}
 
-
 	public bool ExecuteCard(ICard card)
 	{
+		var cardMove = new CardMove();
 		var playerConfig = playerSet[currentPlayer];
 		playerConfig.UseCard(card);
 		return true;
@@ -186,9 +182,13 @@ public class MonopolyGame
 
 	public bool SetCardToPlayer(ICard card, IPlayer player)
 	{
-		var playerConfig = playerSet[player];
-		playerConfig.SetKeptCard(card);
-		return true;
+		if (playerSet.ContainsKey(player))
+		{
+			var playerConfig = playerSet[player];
+			playerConfig.SetKeptCard(card);
+			return true;
+		}
+		return false;
 	}
 
 	public TransactionStatus TakeTax(IPlayer player, Tile tile)

@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Monopoly\\Monopoly\\Monopoly.csproj",
+      "projectUniqueName": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
       "projectName": "Monopoly",
-      "projectPath": "C:\\Monopoly\\Monopoly\\Monopoly.csproj",
+      "projectPath": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
       "packagesPath": "C:\\Users\\Vezsh\\.nuget\\packages\\",
-      "outputPath": "C:\\Monopoly\\Monopoly\\obj\\",
+      "outputPath": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Vezsh\\AppData\\Roaming\\NuGet\\NuGet.Config"

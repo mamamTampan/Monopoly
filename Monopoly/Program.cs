@@ -14,10 +14,10 @@ namespace Monopoly
 			IPlayer player1 = new HumanPlayer(1, "Dadang");
 			game.AddPlayer(player1);
 
-			IPlayer player2 = new HumanPlayer(2, "Tatang");
-			game.AddPlayer(player2);
+		//	IPlayer player2 = new HumanPlayer(2, "Tatang");
+		//	game.AddPlayer(player2);
 
-			Console.WriteLine($"Get Ready {player1.GetName()} and {player2.GetName()}");
+		//	Console.WriteLine($"Get Ready {player1.GetName()} and {player2.GetName()}");
 			game.SetInitialState();
 			game.SetTurnsOrder();
 			Console.WriteLine("Press any key to Continue");

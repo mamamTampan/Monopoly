@@ -1,39 +1,54 @@
-namespace MonopolyProjectSource;
-public class CardDeck
+namespace MonopolyProjectSource
 {
-	private Stack<ChanceCard> chanceDeck;
-
-	public CardDeck(List<ChanceCardType> chanceCardTypes)
+	public class CardDeck
 	{
-		chanceDeck = new Stack<ChanceCard>(chanceCardTypes.Select(type => new ChanceCard(type)));
-		ShuffleCard(chanceDeck);
-	}
-
-	public bool ShuffleCard<T>(Stack<T> deck)
-	{
-		if (deck == null || deck.Count <= 1)
+		private Stack<ChanceCard> chanceDeck;
+		private Stack<CommunityCard> communityDeck;
+		public CardDeck()
 		{
-			return false;
+			List<ChanceCard> chanceCards = ChanceCard.chanceCards;
+			chanceDeck = new Stack<ChanceCard>(chanceCards);
+			List<CommunityCard> communityCards = CommunityCard.communityCards;
+			communityDeck = new Stack<CommunityCard>(communityCards);
+			ShuffleCard(chanceDeck);
+			ShuffleCard(communityDeck);
 		}
-		Random shuffle = new Random();
-		List<T> tempDeck = new List<T>(deck);
-		deck.Clear();
 
-		while (tempDeck.Count > 0)
+		public bool ShuffleCard<T>(Stack<T> deck)
 		{
-			int randomIndex = shuffle.Next(0, tempDeck.Count);
-			deck.Push(tempDeck[randomIndex]);
-			tempDeck.RemoveAt(randomIndex);
-		}
-		return true;
-	}
+			if (deck == null || deck.Count <= 1)
+			{
+				return false;
+			}
+			Random shuffle = new Random();
+			List<T> tempDeck = new List<T>(deck);
+			deck.Clear();
 
-	public ChanceCard DrawChanceCard()
-	{
-		if (chanceDeck.Count > 0)
-		{
-			return chanceDeck.Pop();
+			while (tempDeck.Count > 0)
+			{
+				int randomIndex = shuffle.Next(0, tempDeck.Count);
+				deck.Push(tempDeck[randomIndex]);
+				tempDeck.RemoveAt(randomIndex);
+			}
+			return true;
 		}
-		throw new InvalidOperationException("Chance card deck is empty.");
+
+		public ChanceCard DrawChanceCard()
+		{
+			if (chanceDeck.Count > 0)
+			{
+				return chanceDeck.Pop();
+			}
+			throw new InvalidOperationException("Chance card deck is empty.");
+		}
+		
+		public CommunityCard DrawCommunityCard()
+		{
+			if (communityDeck.Count > 0)
+			{
+				return communityDeck.Pop();
+			}
+			throw new InvalidOperationException("Chance card deck is empty.");
+		}
 	}
 }
