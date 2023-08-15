@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using MonopolyProjectInterface;
 
 namespace MonopolyProjectSource;
@@ -11,6 +12,8 @@ public class MonopolyGame
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
 	private List<IPlayer> TurnsOrder;
+	private List<int> _totalDice;
+	private List<int> _twinDice;
 
 
 	public MonopolyGame()
@@ -22,6 +25,8 @@ public class MonopolyGame
 		playerSet = new Dictionary<IPlayer, PlayerConfig>();
 		TurnsOrder = new List<IPlayer>();
 		currentPlayer = new HumanPlayer(0, "");
+		_totalDice = new List<int>();
+		_twinDice = new List<int>();
 	}
 
 	public GameStatus CheckGameStatus()
@@ -57,25 +62,44 @@ public class MonopolyGame
 		return currentPlayer;
 	}
 
-	public int ThrowDice()
+	public void ThrowDice()
 	{
-		var firstDice = new Dice();
-		dices.Add(firstDice);
-
-		if (firstDice.Roll() == 6) ThrowDices(firstDice);
-		
+		_totalDice.Clear();
+		var firstDice = new Dice().Roll();
+		var secondDice = new Dice().Roll();
+		_totalDice.Add(firstDice);
+		_totalDice.Add(secondDice);
 	}
-	
-	public int ThrowDices (List<Dice> dices)
+
+	public int ThrowDices(int index)
 	{
-		Dice first = new Dice();
-		dices.Add(first);
-		if (first.Role() == 6) createDices(dices);
-		Dice second = new Dice();
-		dices.Add(second);
-		if (second.Role() == 6) createDices(dices);
-
+		return _totalDice[index];
 	}
+
+	public int TwinDice()
+	{
+		_twinDice.Add(0);
+		if (_totalDice[0] == _totalDice[1])
+		{
+			_twinDice[0]++;
+			if (_twinDice[0] == 3)
+			{
+				_twinDice[0] = 0;
+				return 3;
+			}
+			else if (_twinDice[0] == 2)
+			{
+				return 2;
+			}
+			return 1;
+		}
+		else
+		{
+			_twinDice[0] = 0;
+		}
+		return 0;
+	}
+
 
 	public void SetTurnsOrder()
 	{
@@ -85,7 +109,7 @@ public class MonopolyGame
 			if (TurnsOrder.Contains(key))
 			{
 				TurnsOrder = TurnsOrder.OrderByDescending(_ => random.Next())
-							   	   	   .ToList();
+											 .ToList();
 			}
 		}
 	}
@@ -103,7 +127,7 @@ public class MonopolyGame
 		if (playerSet.ContainsKey(player))
 		{
 			var playerConfig = playerSet[player];
-			step = (ThrowDices(0)+ThrowDices(1));
+			step = _totalDice.Sum();
 			playerConfig.SetPositionFromDice(step);
 			return true;
 		}
@@ -120,7 +144,7 @@ public class MonopolyGame
 		if (playerSet.ContainsKey(player))
 		{
 			var playerConfig = playerSet[player];
-			return playerConfig.GetPosition();
+			return playerConfig.GetPosition() % 40;
 		}
 		else
 		{
@@ -171,7 +195,7 @@ public class MonopolyGame
 		{
 			var playerConfig = playerSet[player];
 			int initialPosition = playerConfig.GetPosition();
-			int finalPosition = initialPosition + ThrowDices(0) + ThrowDices(1);
+			int finalPosition = initialPosition + _totalDice.Sum();
 			if (finalPosition > initialPosition && finalPosition == 0)
 			{
 				int startReward = 200;
@@ -183,7 +207,6 @@ public class MonopolyGame
 	}
 	public ICard? TakeChanceCard()
 	{
-		// posisi tile, ambil card, hapus card
 		cardDeck.DrawChanceCard();
 		var card = playerSet[currentPlayer].OpenCard();
 		return null;
