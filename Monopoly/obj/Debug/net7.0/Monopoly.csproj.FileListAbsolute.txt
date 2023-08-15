@@ -28,3 +28,18 @@ C:\Users\Vezsh\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\refint\Monopoly.dll
 C:\Users\Vezsh\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.pdb
 c:\Users\Vezsh\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.genruntimeconfig.cache
 c:\Users\Vezsh\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\ref\Monopoly.dll
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.exe
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.deps.json
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.runtimeconfig.json
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.dll
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\bin\Debug\net7.0\Monopoly.pdb
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.csproj.AssemblyReference.cache
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.AssemblyInfoInputs.cache
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.AssemblyInfo.cs
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.csproj.CoreCompileInputs.cache
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.dll
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\refint\Monopoly.dll
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.pdb
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\Monopoly.genruntimeconfig.cache
+c:\Users\Batch 3\Desktop\Monopoly\Monopoly\obj\Debug\net7.0\ref\Monopoly.dll
