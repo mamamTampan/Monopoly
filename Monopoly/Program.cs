@@ -13,13 +13,13 @@ namespace Monopoly
 			Console.WriteLine("------------------------------------\n");
 
 			MonopolyGame game = new();
-			IPlayer player1 = new HumanPlayer(1, "Dadang");
+			IPlayer player1 = new HumanPlayer(1, "Bang");
 			game.AddPlayer(player1);
 
-			IPlayer player2 = new HumanPlayer(2, "Tatang");
+			IPlayer player2 = new HumanPlayer(2, "Kang");
 			game.AddPlayer(player2);
 
-			IPlayer player3 = new HumanPlayer(3, "Babang");
+			IPlayer player3 = new HumanPlayer(3, "Mas");
 			game.AddPlayer(player3);
 			
 			game.SetInitialState();

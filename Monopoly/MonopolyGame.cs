@@ -17,11 +17,7 @@ public class MonopolyGame
 	{
 		board = new();
 		gameStatus = GameStatus.NOT_STARTED;
-		dices = new List<IDice>
-		{
-			new Dice(),
-			new Dice()
-		};
+		dices = new List<IDice>();
 		cardDeck = new CardDeck();
 		playerSet = new Dictionary<IPlayer, PlayerConfig>();
 		TurnsOrder = new List<IPlayer>();
@@ -61,16 +57,37 @@ public class MonopolyGame
 		return currentPlayer;
 	}
 
-	public int ThrowDices(int index)
+	public int ThrowDice()
 	{
-		return dices[index].Roll();
+		var firstDice = new Dice();
+		dices.Add(firstDice);
+
+		if (firstDice.Roll() == 6) ThrowDices(firstDice);
+		
+	}
+	
+	public int ThrowDices (List<Dice> dices)
+	{
+		Dice first = new Dice();
+		dices.Add(first);
+		if (first.Role() == 6) createDices(dices);
+		Dice second = new Dice();
+		dices.Add(second);
+		if (second.Role() == 6) createDices(dices);
+
 	}
 
 	public void SetTurnsOrder()
 	{
 		Random random = new();
-		TurnsOrder = TurnsOrder.OrderByDescending(_ => random.Next())
-							   .ToList();
+		foreach (var key in playerSet.Keys)
+		{
+			if (TurnsOrder.Contains(key))
+			{
+				TurnsOrder = TurnsOrder.OrderByDescending(_ => random.Next())
+							   	   	   .ToList();
+			}
+		}
 	}
 
 	public bool SetInitialState()

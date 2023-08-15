@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj": {}
+    "C:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj": {
+    "C:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
+        "projectUniqueName": "C:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
         "projectName": "Monopoly",
-        "projectPath": "c:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
+        "projectPath": "C:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
         "packagesPath": "C:\\Users\\Batch 3\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\obj\\",
+        "outputPath": "C:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Batch 3\\AppData\\Roaming\\NuGet\\NuGet.Config"
