@@ -1,3 +1,5 @@
+using MonopolyLog;
+
 namespace MonopolyProjectSource
 {
 	public class CardDeck
@@ -16,6 +18,8 @@ namespace MonopolyProjectSource
 
 		public bool ShuffleCard<T>(Stack<T> deck)
 		{
+			Log.Instance.Info(" Shuffle Card ");
+			
 			if (deck == null || deck.Count <= 1)
 			{
 				return false;

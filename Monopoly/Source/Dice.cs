@@ -1,4 +1,5 @@
 using MonopolyProjectInterface;
+using MonopolyLog;
 
 namespace MonopolyProjectSource
 {
@@ -23,6 +24,8 @@ namespace MonopolyProjectSource
 
 		public int Roll()
 		{
+			Log.Instance.Info(" Roll Dice ");
+			
 			Random rand = new ();
 			diceSide = rand.Next(1, 7);
 			return diceSide;

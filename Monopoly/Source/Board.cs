@@ -1,3 +1,6 @@
+using MonopolyLog;
+
+
 namespace MonopolyProjectSource;
 
 public class Board
@@ -9,7 +12,8 @@ public class Board
 	}
 	public List<Tile> CreatingBoard()
 	{
-
+		Log.Instance.Info(" List Tile ");
+		
 		tiles.Add(new StartTile("GO !!!", 1, "Collect $200 for salary", 200));
 		tiles.Add(new LandmarkTile("Malaysia", 2, "Price $60", false, 60, 2, 0, 0, 50, 50, 4, 1));
 		tiles.Add(new CommunityTile("Community Chest", 3, "Take a Community Card"));
@@ -52,6 +56,7 @@ public class Board
 		tiles.Add(new LandmarkTile("Indonesia ", 40, "Price $400", false, 400, 4, 0, 0, 200, 200, 4, 1));
 		return tiles;
 	}
+	
 	public string? GetTileNameAtPosition(int position)
 	{
 		position -= 1;

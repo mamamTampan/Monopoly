@@ -1,4 +1,5 @@
 using MonopolyProjectInterface;
+using MonopolyLog;
 
 namespace MonopolyProjectSource;
 
@@ -15,6 +16,8 @@ public class PlayerConfig : IPlayerConfig
 
 	public PlayerConfig()
 	{
+		Log.Instance.Info(" Initiate every players ");
+		
 		_pieceColor = GetPiece();
 		_position = 1;
 		_balance = 2000;

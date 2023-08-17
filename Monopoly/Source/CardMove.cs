@@ -34,13 +34,13 @@ namespace MonopolyProjectSource
 
 public bool FreeFromJailCard(IPlayerConfig player, ICard card)
 {
-    if (player.IsInJail())
-    {
-        player.UseCard(card);
-        player.SetPositionToNew(11); // Pindahkan ke posisi setelah Jail
-        return true;
-    }
-    return false;
+	if (player.IsInJail())
+	{
+		player.UseCard(card);
+		player.SetPositionToNew(11);
+		return true;
+	}
+	return false;
 }
 
 

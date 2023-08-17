@@ -1,13 +1,13 @@
-using System.Runtime.InteropServices;
 using MonopolyProjectInterface;
+using MonopolyLog;
 
 namespace MonopolyProjectSource;
 
+public delegate void GameInitializationDelegate();
 public class MonopolyGame
 {
 	private Board board;
 	private GameStatus gameStatus;
-	private List<IDice> dices;
 	private CardDeck cardDeck;
 	private IPlayer currentPlayer;
 	private Dictionary<IPlayer, PlayerConfig> playerSet;
@@ -15,12 +15,10 @@ public class MonopolyGame
 	private List<int> _totalDice;
 	private List<int> _twinDice;
 
-
 	public MonopolyGame()
 	{
 		board = new();
 		gameStatus = GameStatus.NOT_STARTED;
-		dices = new List<IDice>();
 		cardDeck = new CardDeck();
 		playerSet = new Dictionary<IPlayer, PlayerConfig>();
 		TurnsOrder = new List<IPlayer>();
@@ -31,11 +29,15 @@ public class MonopolyGame
 
 	public GameStatus CheckGameStatus()
 	{
+		Log.Instance.Info(" Check Game Status ");
+		
 		return gameStatus;
 	}
 
 	public bool AddPlayer(IPlayer player)
 	{
+		Log.Instance.Info(" Add every players ");
+		
 		if (playerSet.Count <= 8)
 		{
 			if (!playerSet.ContainsKey(player))
@@ -46,6 +48,7 @@ public class MonopolyGame
 			}
 		}
 		return false;
+		
 	}
 
 	public List<IPlayer> GetPlayers()
@@ -57,7 +60,7 @@ public class MonopolyGame
 		return TurnsOrder;
 	}
 
-	public IPlayer GetCurrentTurn()
+	public IPlayer GetCurrentTurn(IPlayer player)
 	{
 		return currentPlayer;
 	}
@@ -100,25 +103,24 @@ public class MonopolyGame
 		return 0;
 	}
 
-
 	public void SetTurnsOrder()
 	{
 		Random random = new();
-		foreach (var key in playerSet.Keys)
+		if (TurnsOrder.Contains(currentPlayer))
 		{
-			if (TurnsOrder.Contains(key))
-			{
-				TurnsOrder = TurnsOrder.OrderByDescending(_ => random.Next())
-											 .ToList();
-			}
+			TurnsOrder = TurnsOrder.OrderByDescending(_ => random.Next())
+								   .ToList();
 		}
 	}
 
+	public event GameInitializationDelegate? GameInitialized;
 	public bool SetInitialState()
 	{
 		board.CreatingBoard();
 		SetTurnsOrder();
 		gameStatus = GameStatus.ONGOING;
+
+		GameInitialized?.Invoke();
 		return true;
 	}
 
@@ -133,6 +135,7 @@ public class MonopolyGame
 		}
 		return false;
 	}
+
 	public string? TileName(int position)
 	{
 		var tile = board.GetTileNameAtPosition(position);
@@ -148,7 +151,7 @@ public class MonopolyGame
 		}
 		else
 		{
-			throw new ArgumentException("Player not found in playerSet.");
+			throw new ArgumentException("Player not found");
 		}
 	}
 
@@ -161,7 +164,7 @@ public class MonopolyGame
 		}
 		else
 		{
-			throw new ArgumentException("Player not found in playerSet.");
+			throw new ArgumentException("Player not found.");
 		}
 	}
 
@@ -174,7 +177,7 @@ public class MonopolyGame
 		}
 		else
 		{
-			throw new ArgumentException("Player not found in playerSet.");
+			throw new ArgumentException("Player not found.");
 		}
 	}
 
@@ -311,8 +314,8 @@ public class MonopolyGame
 			}
 		}
 		return TransactionStatus.BALANCE_NOT_ENOUGH;
-
 	}
+
 	public TransactionStatus PlayerBuyHouse(IPlayer player, Tile tile)
 	{
 		if (playerSet.ContainsKey(player))
@@ -380,7 +383,7 @@ public class MonopolyGame
 		else if (gameStatus == GameStatus.ONGOING)
 		{
 			var index = TurnsOrder.IndexOf(currentPlayer);
-			if (index == -1)
+			if (index != -1)
 			{
 				var nextIndex = (index + 1) % TurnsOrder.Count;
 				currentPlayer = TurnsOrder[nextIndex];
@@ -389,27 +392,24 @@ public class MonopolyGame
 		return true;
 	}
 
-
-	public IPlayer CheckRichest()
+	public List<IPlayer> GetRichestPlayers()
 	{
-		var highestBalance = int.MinValue;
-		foreach (var player in playerSet.Keys)
+		TurnsOrder = GetPlayers();
+		var richestList = TurnsOrder.OrderByDescending(player => CheckPlayerBalance(player))
+											  .ToList();
+
+		return richestList;
+	}
+
+	public IPlayer? CheckWinner()
+	{
+		TurnsOrder = GetRichestPlayers();
+		var richestPlayer = TurnsOrder.FirstOrDefault();
+		if (richestPlayer != null)
 		{
-			var playerConfig = playerSet[player];
-			var playerBalance = playerConfig.GetBalance();
-			if (playerBalance > highestBalance)
-			{
-				currentPlayer = player;
-				highestBalance = playerBalance;
-			}
+			gameStatus = GameStatus.WIN;
+			return richestPlayer;
 		}
-		return currentPlayer;
+		return null;
 	}
-
-	public IPlayer CheckWinner()
-	{
-		gameStatus = GameStatus.WIN;
-		return currentPlayer;
-	}
-
 }

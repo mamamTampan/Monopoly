@@ -2,10 +2,12 @@ using MonopolyProjectInterface;
 
 namespace MonopolyProjectSource;
 
+
 public class HumanPlayer : IPlayer
 {
 	private int _id = 0;
 	private string? _name = "";
+	
 	public HumanPlayer(int id,string? name)
 	{
 		SetId(id);

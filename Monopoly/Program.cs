@@ -1,34 +1,48 @@
 ﻿using MonopolyProjectInterface;
 using MonopolyProjectSource;
+using MonopolyLog;
 
-namespace Monopoly
+namespace MonopolyApp
 {
-	class Program
+	public class Program
 	{
-		static void Main()
+		static void HandleGameInitialization()
 		{
+			Console.WriteLine("\n   Game initialization completed");
+			Log.Instance.Info(" Delegate ");
+		}
+		static async Task Main()
+		{
+			MonopolyGame game = new();
+			
 			Console.Clear();
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("-+++--Welcome to Monopoly Game--+++-");
 			Console.WriteLine("------------------------------------\n");
-
-			MonopolyGame game = new();
-			IPlayer player1 = new HumanPlayer(1, "Bang");
-			game.AddPlayer(player1);
-
-			IPlayer player2 = new HumanPlayer(2, "Kang");
+			await Task.Delay(500); Console.Write("  ===========");
+			await Task.Delay(500); Console.Write("==========");
+			await Task.Delay(500); Console.Write("==========\n");
+			Log.Instance.Info(" UI Started ");
+			
+			IPlayer player1 = new HumanPlayer(1, "Babang");
+			game.AddPlayer(player1);			
+			IPlayer player2 = new HumanPlayer(2, "Kakang");
 			game.AddPlayer(player2);
-
 			IPlayer player3 = new HumanPlayer(3, "Mas");
 			game.AddPlayer(player3);
+			Log.Instance.Info(" Player Created ");			
 
+			game.GameInitialized += HandleGameInitialization;
 			game.SetInitialState();
+			
 			Console.WriteLine("    Press any key to Continue");
 			Console.ReadKey();
 
 			Dictionary<IPlayer, bool> hasRolledDictionary = new();
 			Console.Clear();
-
+			
+			Log.Instance.Info(" Choose Menu for every Player ");
+			
 			while (game.CheckGameStatus() == GameStatus.ONGOING)
 			{
 				foreach (IPlayer currentPlayer in game.GetPlayers())
@@ -62,7 +76,7 @@ namespace Monopoly
 										{
 											Console.Clear();
 											Console.WriteLine(" +++++  Congrats, U can roll again  +++++");
-											Console.WriteLine($"{currentPlayer.GetName()} Rolled {diceRoll}		t{twinDice}");
+											Console.WriteLine($"{currentPlayer.GetName()} Rolled {diceRoll}     T: {twinDice}");
 											Console.WriteLine($"Your dice values: {diceValue1} and {diceValue2}");
 
 											int currentPosition = game.CheckPlayerPosition(currentPlayer);
@@ -80,7 +94,7 @@ namespace Monopoly
 										{
 											Console.WriteLine(" ---- are U cheating ? ---- ");
 											Console.WriteLine(" 	Go to Jail now !!! ");
-											int currentPosition = game.CheckPlayerPosition(currentPlayer);
+											var currentPosition = game.CheckPlayerPosition(currentPlayer);
 											var from = game.TileName(currentPosition);
 											Console.WriteLine($"Position before move: Tile {currentPosition}. {from}");
 
@@ -93,7 +107,7 @@ namespace Monopoly
 										}
 										else
 										{
-											Console.WriteLine($"{currentPlayer.GetName()} Rolled {diceRoll}		t{twinDice}");
+											Console.WriteLine($"{currentPlayer.GetName()} Rolled {diceRoll}     T: {twinDice}");
 											Console.WriteLine($"Your dice values: {diceValue1} and {diceValue2}");
 
 											int currentPosition = game.CheckPlayerPosition(currentPlayer);
@@ -117,12 +131,14 @@ namespace Monopoly
 									Console.Clear();
 									Console.WriteLine("You have already rolled the dice this turn.\n");
 								}
+								Log.Instance.Info(" ThrowDice Menu ");
 								break;
 
 							case "2":
 								Console.Clear();
 								int balance = game.CheckPlayerBalance(currentPlayer);
 								Console.WriteLine($"{currentPlayer.GetName()}'s balance: {balance}\n");
+								Log.Instance.Info(" Check All Item Menu ");
 								break;
 
 							case "3":
@@ -143,6 +159,7 @@ namespace Monopoly
 									hasRolledDictionary[currentPlayer] = false;
 									turn = true;
 								}
+								Log.Instance.Info(" Choose to End Turn ");
 								break;
 
 							case "0":
@@ -150,17 +167,19 @@ namespace Monopoly
 								Console.WriteLine("......Exiting the game......");
 								Console.WriteLine("Thanks for playing Monopoly!\n");
 								Environment.Exit(0);
+								Log.Instance.Info(" Exit Game ");
 								break;
 
 							default:
 								Console.Clear();
 								Console.WriteLine("Invalid choice. Please choose again.\n");
+								Log.Instance.Info(" Wrong Input ");
 								break;
 						}
 					}
 				}
 				game.SetNextTurn();
-
+				Log.Instance.Info(" ChangeTurn ");
 			}
 		}
 	}
