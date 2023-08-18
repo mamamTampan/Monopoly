@@ -377,19 +377,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Vezsh\\.nuget\\packages\\": {}
+    "C:\\Users\\Batch 3\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
+      "projectUniqueName": "c:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
       "projectName": "Monopoly",
-      "projectPath": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
-      "packagesPath": "C:\\Users\\Vezsh\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Vezsh\\Desktop\\Monopoly\\Monopoly\\obj\\",
+      "projectPath": "c:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\Monopoly.csproj",
+      "packagesPath": "C:\\Users\\Batch 3\\.nuget\\packages\\",
+      "outputPath": "c:\\Users\\Batch 3\\Desktop\\Monopoly\\Monopoly\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Vezsh\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Batch 3\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -438,7 +438,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }
