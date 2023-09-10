@@ -48,7 +48,6 @@ public class MonopolyGame
 			}
 		}
 		return false;
-		
 	}
 
 	public List<IPlayer> GetPlayers()
